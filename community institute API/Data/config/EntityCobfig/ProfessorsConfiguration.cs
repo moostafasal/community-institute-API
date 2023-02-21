@@ -28,17 +28,13 @@ namespace community_institute_API.Data.config.EntityCobfig
             builder.HasMany(p => p.clases)
                 .WithOne(c => c.Professor)
                 .HasForeignKey(c => c.ProfessorId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasMany(p => p.Assignment)
                 .WithOne(a => a.professors)
                 .HasForeignKey(a => a.proffid)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasOne(p => p.File)
-                .WithOne()
-                .HasForeignKey<Professors>(p => p.FileId)
-                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 

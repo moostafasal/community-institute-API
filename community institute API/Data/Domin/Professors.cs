@@ -2,13 +2,23 @@
 {
     public class Professors
     {
+        public Professors()
+        {
+
+        }
+        public Professors(string name,string imgUrl)
+        {
+            Name = name;
+          
+            ImgUrl = imgUrl;
+        }
+        
         public int Id { get; set; }
-        public int FileId { get; set; }
-        public Files File { get; set; }
+  
         public string Name { get; set; }
 
  
-        public string ImgUrl { get; set; }
+        public string ?ImgUrl { get; set; }
         public ICollection<ClassMaterial> Materials { get; set; }=new List<ClassMaterial>();
         public ICollection<clases> clases { get; set; } = new List<clases>();
 

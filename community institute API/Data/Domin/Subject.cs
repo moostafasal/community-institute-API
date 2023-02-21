@@ -6,6 +6,10 @@ namespace community_institute_API.Data.Domin
 {
     public class Subject
     {
+        public Subject()
+        {
+                
+        }
         public int Id { get; set; }
 
         public string Code { get; set; }

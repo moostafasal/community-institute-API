@@ -1,13 +1,16 @@
-﻿namespace community_institute_API.Data.Domin
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace community_institute_API.Data.Domin
 {
     public class Solution
     {
         public int Id { get; set; }
         public string Description { get; set; }
+        public string Url { get; set; }
+        public DateTime Timestamp { get; set; } = DateTime.Now;
         public string Name { get; set; }
-
-        public int FileId { get; set; }
-        public Files File { get; set; }
+        public string UserId { get; set; }
+        public IdentityUser User { get; set; }
 
         public int AssignmentId { get; set; }
 

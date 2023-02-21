@@ -16,20 +16,20 @@ namespace community_institute_API.Data.config.EntityCobfig
             builder.Property(a => a.Deadline)
                    .IsRequired();
 
-            builder.HasOne(a => a.File)
-                   .WithOne()
-                   .HasForeignKey<Assignment>(a => a.FileId)
-                   .OnDelete(DeleteBehavior.Cascade);
+            //builder.HasOne(a => a.File)
+            //       .WithOne()
+            //       .HasForeignKey<Assignment>(a => a.FileId)
+            //       .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(a => a.professors)
                    .WithMany(p => p.Assignment)
                    .HasForeignKey(a => a.proffid)
-                   .OnDelete(DeleteBehavior.Restrict);
+                   .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasOne(a => a.TA)
                    .WithMany(t => t.Assignment)
                    .HasForeignKey(a => a.TAid)
-                   .OnDelete(DeleteBehavior.Restrict);
+                   .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasMany(a => a.Solutions)
                    .WithOne(s => s.Assignment)

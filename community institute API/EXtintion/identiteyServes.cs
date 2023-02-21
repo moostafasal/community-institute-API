@@ -10,7 +10,7 @@ namespace community_institute_API.EXtintion
     {
         public static IServiceCollection IdentityServesiszz(this IServiceCollection Services, IConfiguration configuration)
         {
-            Services.AddIdentity< IdentityUser, IdentityRole>(op =>
+            Services.AddIdentity<IdentityUser , IdentityRole>(op =>
             {
                 //op.Password.RequireLowercase
             })

@@ -13,13 +13,13 @@ namespace community_institute_API.Data.config.EntityCobfig
             builder.Property(s => s.Name)
                    .IsRequired();
 
-            builder.Property(s => s.FileId)
-                   .IsRequired();
+            //builder.Property(s => s.FileId)
+            //       .IsRequired();
 
-            builder.HasOne(s => s.File)
-                   .WithOne()
-                   .HasForeignKey<Solution>(s => s.FileId)
-                   .OnDelete(DeleteBehavior.Cascade);
+            //builder.HasOne(s => s.File)
+            //       .WithOne()
+            //       .HasForeignKey<Solution>(s => s.FileId)
+            //       .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(s => s.Assignment)
                    .WithMany(a => a.Solutions)
@@ -30,6 +30,10 @@ namespace community_institute_API.Data.config.EntityCobfig
                    .WithMany(e => e.Solutions)
                    .HasForeignKey(s => s.EnrollmentId)
                    .OnDelete(DeleteBehavior.Cascade);
+            builder.HasOne(c => c.User)
+             .WithMany()
+             .HasForeignKey(c => c.UserId)
+             .OnDelete(DeleteBehavior.Restrict);
         }
     }
 

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 
 namespace community_institute_API.Data.Domin
@@ -10,10 +11,9 @@ namespace community_institute_API.Data.Domin
         [Required]
         public string Name { get; set; }
 
-        public string ImgUrl { get; set; }
+        public string?  ImgUrl { get; set; }
 
-        public int FileId { get; set; }
-        public Files File { get; set; }
+
 
         public ICollection<clases> Classes { get; set; }=new HashSet<clases>();
         public ICollection<ClassMaterial> Materials { get; set; } = new HashSet<ClassMaterial>();

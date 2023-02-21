@@ -6,8 +6,8 @@ namespace community_institute_API.DTOs
     {
         [Required]
         [EmailAddress]
-        public string Email { get; set; }
+        public string ?Email { get; set; }
         [Required]
-        public string Passowrd { get; set; }
+        public string ?Passowrd { get; set; }
     }
 }

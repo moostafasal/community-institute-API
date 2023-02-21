@@ -19,10 +19,7 @@ namespace community_institute_API.Data.config.EntityCobfig
             builder.Property(s => s.Units)
                 .IsRequired();
 
-            builder.HasOne(s => s.Classes)
-                .WithMany(c => c.Subject)
-                .HasForeignKey(s => s.classid)
-                .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 

@@ -19,17 +19,20 @@ namespace community_institute_API.Data.config.EntityCobfig
             builder.HasMany(t => t.Materials)
                    .WithOne(m => m.TA)
                    .HasForeignKey(m => m.TAId)
-                   .OnDelete(DeleteBehavior.SetNull);
+                   .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasMany(t => t.Assignment)
                    .WithOne(a => a.TA)
                    .HasForeignKey(a => a.TAid)
-                   .OnDelete(DeleteBehavior.SetNull);
+                   .OnDelete(DeleteBehavior.NoAction);
 
-            builder.HasOne(t => t.File)
-                   .WithMany()
-                   .HasForeignKey(t => t.FileId)
-                   .OnDelete(DeleteBehavior.SetNull);
+            //builder.HasOne(c => c.User)
+            //       .WithMany()
+            //       .HasForeignKey(c => c.UserId)
+            //       .OnDelete(DeleteBehavior.SetNull);
+
+            builder.HasMany(T => T.Classes).WithMany(c => c.TAs);
+
         }
     }
 

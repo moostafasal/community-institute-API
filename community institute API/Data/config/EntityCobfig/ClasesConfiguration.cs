@@ -19,17 +19,17 @@ public class ClasesConfiguration : IEntityTypeConfiguration<clases>
             .HasForeignKey(e => e.classid)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasMany(c => c.Subject)
+        builder.HasMany(c => c.Subjects)
             .WithOne(s => s.Classes)
             .HasForeignKey(s => s.classid)
             .OnDelete(DeleteBehavior.Cascade);
 
-  
+
 
         builder.HasOne(c => c.Professor)
             .WithMany(p => p.clases)
-            .HasForeignKey(c => c.ProfessorId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .HasForeignKey(c => c.ProfessorId);
+
     }
 }
 

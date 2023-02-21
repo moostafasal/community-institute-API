@@ -6,8 +6,11 @@ using System.Xml.Linq;
 namespace community_institute_API.Data.Domin
 {
     public class Student
-    {
-
+    {//add 
+        public Student()
+        {
+            Enrollments = new HashSet<Enrollment>();
+        }
         public int Id { get; set; }
 
         [Required]
@@ -20,7 +23,7 @@ namespace community_institute_API.Data.Domin
         public int Age { get; set; }
 
         [Display(Name = "Image URL")]
-        public string ImageURL { get; set; }
+        public string ?ImageURL { get; set; }
 
         public ICollection<Enrollment> Enrollments { get; set; } = new HashSet<Enrollment>();
         public string UserId { get; set; }
