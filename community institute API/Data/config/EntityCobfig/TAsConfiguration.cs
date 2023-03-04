@@ -25,11 +25,10 @@ namespace community_institute_API.Data.config.EntityCobfig
                    .WithOne(a => a.TA)
                    .HasForeignKey(a => a.TAid)
                    .OnDelete(DeleteBehavior.NoAction);
-
-            //builder.HasOne(c => c.User)
-            //       .WithMany()
-            //       .HasForeignKey(c => c.UserId)
-            //       .OnDelete(DeleteBehavior.SetNull);
+            
+            builder.HasOne(P => P.User)
+                        .WithOne()
+                        .HasForeignKey<TAs>(s => s.UserId);
 
             builder.HasMany(T => T.Classes).WithMany(c => c.TAs);
 

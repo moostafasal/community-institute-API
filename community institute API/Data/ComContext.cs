@@ -23,8 +23,9 @@ namespace community_institute_API.Data
         {
             //modelBuilder.ApplyConfiguration(new ProductConfig();
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<IdentityUser>().ToTable("Users");
+            modelBuilder.Entity<Appuser>().ToTable("Users");
             modelBuilder.Entity<IdentityRole>().ToTable("Roles");
+            
             
             modelBuilder.ApplyConfiguration(new StudentConfiguration());
             modelBuilder.ApplyConfiguration(new EnrollmentConfiguration());
@@ -52,7 +53,7 @@ namespace community_institute_API.Data
 
 
         }
-
+        public DbSet<Admin> Admins { get; set; }
 
         public DbSet<Student> Students { get; set; }
         public DbSet<Enrollment> Enrollments { get; set; }

@@ -1,6 +1,7 @@
 using community_institute_API.Data;
 using community_institute_API.Data.config;
 using community_institute_API.EXtintion;
+using community_institute_API.Serves;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -9,32 +10,47 @@ using System.Text;
 
 namespace community_institute_API
 {
-    public class Program
-    {
-        public static void Main(string[] args)
+  
+        public class Program
         {
-            var builder = WebApplication.CreateBuilder(args);
+            public static void Main(string[] args)
+            {
+                var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-            builder.Services.AddAuthorization();
+            builder.Services.AddControllers();
+          
+            
+                builder.Services.AddSwaggerGen();
+            //allow any origin
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
+            });
+            //all endpoint controller API
+            builder.Services.AddControllers();
+//allow DI for ItookenServes
+            builder.Services.AddScoped<ITookenServiice, TokenServes>();
 
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+
+
+
 
             builder.Services.AddDbContext<ComContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("oo")));
+        options.UseSqlServer(builder.Configuration.GetConnectionString("oo")));
 
 
-            builder.Services.IdentityServesiszz(builder.Configuration);
+                builder.Services.IdentityServesiszz(builder.Configuration);
 
 
-            //configer the identity
-            // Add services to the container.
-            builder.Services.AddAuthorization();
+                //configer the identity
+                // Add services to the container.
+                builder.Services.AddAuthorization();
 
 
-            var app = builder.Build();
+                var app = builder.Build();
 
 
 
@@ -45,30 +61,22 @@ namespace community_institute_API
                 app.UseSwaggerUI();
             }
 
-            app.UseHttpsRedirection();
+            app.UseRouting();
 
             app.UseAuthorization();
+            app.UseAuthentication();
+            app.UseAuthorization();
+            app.UseHttpsRedirection();
 
-            var summaries = new[]
-            {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
 
-            app.MapGet("/weatherforecast", (HttpContext httpContext) =>
+            app.UseEndpoints(endpoints =>
             {
-                var forecast = Enumerable.Range(1, 5).Select(index =>
-                    new WeatherForecast
-                    {
-                        Date = DateTime.Now.AddDays(index),
-                        TemperatureC = Random.Shared.Next(-20, 55),
-                        Summary = summaries[Random.Shared.Next(summaries.Length)]
-                    })
-                    .ToArray();
-                return forecast;
-            })
-            .WithName("GetWeatherForecast");
+                endpoints.MapControllers();
+            });
 
             app.Run();
         }
+        
     }
 }
+

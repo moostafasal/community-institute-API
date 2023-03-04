@@ -34,6 +34,9 @@ namespace community_institute_API.Data.config.EntityCobfig
                 .WithOne(a => a.professors)
                 .HasForeignKey(a => a.proffid)
                 .OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(P => P.User)
+                          .WithOne()
+                          .HasForeignKey<Professors>(P => P.UserId);
 
         }
     }

@@ -15,8 +15,15 @@ namespace community_institute_API.Data.Domin
         public string Code { get; set; }
 
         public int Units { get; set; }
-        public int classid { get; set; }
-        public clases Classes { get; set; }
+        //name
+        public string Name { get; set; }
+
+
+
+
+
+        public int year { get; set; }
+        public ICollection<clases> classes { get; set; } = new HashSet<clases>();
 
     }
 }

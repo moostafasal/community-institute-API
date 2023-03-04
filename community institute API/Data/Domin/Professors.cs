@@ -19,6 +19,14 @@
 
  
         public string ?ImgUrl { get; set; }
+        //relation with appuser
+        //acdimc id
+        public string? AcademicId { get; set; }
+        //bio
+        public string ?Bio { get; set; }
+        public string UserId { get; set; }
+        public Appuser User { get; set; }
+        
         public ICollection<ClassMaterial> Materials { get; set; }=new List<ClassMaterial>();
         public ICollection<clases> clases { get; set; } = new List<clases>();
 

@@ -9,8 +9,8 @@ namespace community_institute_API.Data.Domin
         public string Url { get; set; }
         public DateTime Timestamp { get; set; } = DateTime.Now;
         public string Name { get; set; }
-        public string UserId { get; set; }
-        public IdentityUser User { get; set; }
+        //public string UserId { get; set; }
+        //public Appuser User { get; set; }
 
         public int AssignmentId { get; set; }
 

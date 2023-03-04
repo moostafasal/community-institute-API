@@ -17,8 +17,7 @@ namespace community_institute_API.Data.Domin
         public int? proffID { get; set; }
 
         public Professors professors { get; set; }
-        public string UserId { get; set; }
-        public IdentityUser User { get; set; }
+
 
         public DateTime Timestamp { get; set; } = DateTime.Now;
 

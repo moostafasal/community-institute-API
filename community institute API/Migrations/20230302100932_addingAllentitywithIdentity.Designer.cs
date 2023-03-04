@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using community_institute_API.Data;
 
@@ -11,9 +12,10 @@ using community_institute_API.Data;
 namespace community_institute_API.Migrations
 {
     [DbContext(typeof(ComContext))]
-    partial class ComContextModelSnapshot : ModelSnapshot
+    [Migration("20230302100932_addingAllentitywithIdentity")]
+    partial class addingAllentitywithIdentity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,27 +26,23 @@ namespace community_institute_API.Migrations
 
             modelBuilder.Entity("community_institute_API.Data.Domin.Admin", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Id");
+                    b.HasKey("id");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Admins");
+                    b.ToTable("admins");
                 });
 
             modelBuilder.Entity("community_institute_API.Data.Domin.Assignment", b =>
@@ -106,17 +104,12 @@ namespace community_institute_API.Migrations
                         .IsRequired()
                         .HasColumnType("int");
 
-                    b.Property<int>("SubjectId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("GroupId")
                         .IsUnique();
 
                     b.HasIndex("ProfessorId");
-
-                    b.HasIndex("SubjectId");
 
                     b.ToTable("clases");
                 });
@@ -180,9 +173,6 @@ namespace community_institute_API.Migrations
                     b.Property<int>("GradesId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ProfessorId")
-                        .HasColumnType("int");
-
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
 
@@ -196,8 +186,6 @@ namespace community_institute_API.Migrations
 
                     b.HasIndex("GradesId")
                         .IsUnique();
-
-                    b.HasIndex("ProfessorId");
 
                     b.HasIndex("StudentId");
 
@@ -255,12 +243,6 @@ namespace community_institute_API.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("AcademicId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Bio")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImgUrl")
                         .HasMaxLength(250)
@@ -328,14 +310,8 @@ namespace community_institute_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("AcademicId")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("Age")
                         .HasColumnType("int");
-
-                    b.Property<decimal?>("GPA")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("ImageURL")
                         .HasMaxLength(200)
@@ -349,9 +325,6 @@ namespace community_institute_API.Migrations
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<int?>("year")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -374,18 +347,18 @@ namespace community_institute_API.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("Units")
-                        .HasMaxLength(20)
+                        .HasColumnType("int");
+
+                    b.Property<int>("classid")
                         .HasColumnType("int");
 
                     b.Property<int>("year")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("classid");
 
                     b.ToTable("Subjects", (string)null);
                 });
@@ -397,9 +370,6 @@ namespace community_institute_API.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("AcademicId")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImgUrl")
                         .HasColumnType("nvarchar(max)");
@@ -692,17 +662,9 @@ namespace community_institute_API.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("community_institute_API.Data.Domin.Subject", "Subject")
-                        .WithMany("classes")
-                        .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Groups");
 
                     b.Navigation("Professor");
-
-                    b.Navigation("Subject");
                 });
 
             modelBuilder.Entity("community_institute_API.Data.Domin.ClassMaterial", b =>
@@ -738,10 +700,6 @@ namespace community_institute_API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("community_institute_API.Data.Domin.Professors", "Professor")
-                        .WithMany()
-                        .HasForeignKey("ProfessorId");
-
                     b.HasOne("community_institute_API.Data.Domin.Student", "Student")
                         .WithMany("Enrollments")
                         .HasForeignKey("StudentId")
@@ -755,8 +713,6 @@ namespace community_institute_API.Migrations
                         .IsRequired();
 
                     b.Navigation("Grades");
-
-                    b.Navigation("Professor");
 
                     b.Navigation("Student");
 
@@ -802,6 +758,17 @@ namespace community_institute_API.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("community_institute_API.Data.Domin.Subject", b =>
+                {
+                    b.HasOne("community_institute_API.Data.Domin.clases", "Classes")
+                        .WithMany("Subjects")
+                        .HasForeignKey("classid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Classes");
                 });
 
             modelBuilder.Entity("community_institute_API.Data.Domin.TAs", b =>
@@ -898,6 +865,8 @@ namespace community_institute_API.Migrations
             modelBuilder.Entity("community_institute_API.Data.Domin.clases", b =>
                 {
                     b.Navigation("Enrollments");
+
+                    b.Navigation("Subjects");
                 });
 
             modelBuilder.Entity("community_institute_API.Data.Domin.Enrollment", b =>
@@ -929,11 +898,6 @@ namespace community_institute_API.Migrations
             modelBuilder.Entity("community_institute_API.Data.Domin.Student", b =>
                 {
                     b.Navigation("Enrollments");
-                });
-
-            modelBuilder.Entity("community_institute_API.Data.Domin.Subject", b =>
-                {
-                    b.Navigation("classes");
                 });
 
             modelBuilder.Entity("community_institute_API.Data.Domin.TAs", b =>

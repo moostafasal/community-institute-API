@@ -17,7 +17,14 @@ namespace community_institute_API.Data.config.EntityCobfig
                 .HasMaxLength(20);
 
             builder.Property(s => s.Units)
-                .IsRequired();
+                .IsRequired()
+          .HasMaxLength(20);
+
+            //relation with clases
+            builder.HasMany(s =>s.classes)
+                .WithOne(c => c.Subject)
+                .HasForeignKey(c => c.SubjectId);
+
 
 
         }

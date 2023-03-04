@@ -1,4 +1,5 @@
 ﻿using community_institute_API.Data;
+using community_institute_API.Data.Domin;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -10,7 +11,7 @@ namespace community_institute_API.EXtintion
     {
         public static IServiceCollection IdentityServesiszz(this IServiceCollection Services, IConfiguration configuration)
         {
-            Services.AddIdentity<IdentityUser , IdentityRole>(op =>
+            Services.AddIdentity<Appuser , IdentityRole>(op =>
             {
                 //op.Password.RequireLowercase
             })

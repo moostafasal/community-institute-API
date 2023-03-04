@@ -16,6 +16,8 @@
         public int GradesId { get; set; }
 
         public Grades? Grades { get; set; }
+        public int? ProfessorId { get; set; }
+        public Professors Professor { get; set; }
 
 
         public ICollection<Solution> Solutions { get; set; } = new HashSet<Solution>();

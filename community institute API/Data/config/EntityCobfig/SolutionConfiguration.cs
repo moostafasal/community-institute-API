@@ -30,10 +30,10 @@ namespace community_institute_API.Data.config.EntityCobfig
                    .WithMany(e => e.Solutions)
                    .HasForeignKey(s => s.EnrollmentId)
                    .OnDelete(DeleteBehavior.Cascade);
-            builder.HasOne(c => c.User)
-             .WithMany()
-             .HasForeignKey(c => c.UserId)
-             .OnDelete(DeleteBehavior.Restrict);
+            //builder.HasOne(c => c.User)
+            // .WithMany()
+            // .HasForeignKey(c => c.UserId)
+            // .OnDelete(DeleteBehavior.Restrict);
         }
     }
 

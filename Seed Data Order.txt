@@ -1,0 +1,11 @@
+Seed data order :
+
+Student
+Professors
+Groups
+clases
+Enrollment
+Grades
+Assignment
+Solution
+ClassMaterial

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using community_institute_API.Data;
 
@@ -11,9 +12,10 @@ using community_institute_API.Data;
 namespace community_institute_API.Migrations
 {
     [DbContext(typeof(ComContext))]
-    partial class ComContextModelSnapshot : ModelSnapshot
+    [Migration("20230302113907_AdminEntity")]
+    partial class AdminEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,10 +34,6 @@ namespace community_institute_API.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
@@ -180,9 +178,6 @@ namespace community_institute_API.Migrations
                     b.Property<int>("GradesId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ProfessorId")
-                        .HasColumnType("int");
-
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
 
@@ -196,8 +191,6 @@ namespace community_institute_API.Migrations
 
                     b.HasIndex("GradesId")
                         .IsUnique();
-
-                    b.HasIndex("ProfessorId");
 
                     b.HasIndex("StudentId");
 
@@ -255,12 +248,6 @@ namespace community_institute_API.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("AcademicId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Bio")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImgUrl")
                         .HasMaxLength(250)
@@ -328,14 +315,8 @@ namespace community_institute_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("AcademicId")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("Age")
                         .HasColumnType("int");
-
-                    b.Property<decimal?>("GPA")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("ImageURL")
                         .HasMaxLength(200)
@@ -349,9 +330,6 @@ namespace community_institute_API.Migrations
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<int?>("year")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -374,10 +352,6 @@ namespace community_institute_API.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("Units")
                         .HasMaxLength(20)
                         .HasColumnType("int");
@@ -397,9 +371,6 @@ namespace community_institute_API.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("AcademicId")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImgUrl")
                         .HasColumnType("nvarchar(max)");
@@ -738,10 +709,6 @@ namespace community_institute_API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("community_institute_API.Data.Domin.Professors", "Professor")
-                        .WithMany()
-                        .HasForeignKey("ProfessorId");
-
                     b.HasOne("community_institute_API.Data.Domin.Student", "Student")
                         .WithMany("Enrollments")
                         .HasForeignKey("StudentId")
@@ -755,8 +722,6 @@ namespace community_institute_API.Migrations
                         .IsRequired();
 
                     b.Navigation("Grades");
-
-                    b.Navigation("Professor");
 
                     b.Navigation("Student");
 

@@ -23,7 +23,6 @@
     <Folder Include="Data\ideintity\" />
     <Folder Include="Helper\" />
     <Folder Include="Erorres\" />
-    <Folder Include="DTOs\" />
     <Folder Include="midelwear\" />
     <Folder Include="Serves\" />
   </ItemGroup>

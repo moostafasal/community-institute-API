@@ -12,8 +12,8 @@ using community_institute_API.Data;
 namespace community_institute_API.Migrations
 {
     [DbContext(typeof(ComContext))]
-    [Migration("20230216151229_addingEntity")]
-    partial class addingEntity
+    [Migration("20230304142558_AddacdimcidtoproffandTA")]
+    partial class AddacdimcidtoproffandTA
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,6 +23,31 @@ namespace community_institute_API.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("community_institute_API.Data.Domin.Admin", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Admins");
+                });
 
             modelBuilder.Entity("community_institute_API.Data.Domin.Assignment", b =>
                 {
@@ -83,12 +108,17 @@ namespace community_institute_API.Migrations
                         .IsRequired()
                         .HasColumnType("int");
 
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("GroupId")
                         .IsUnique();
 
                     b.HasIndex("ProfessorId");
+
+                    b.HasIndex("SubjectId");
 
                     b.ToTable("clases");
                 });
@@ -124,10 +154,6 @@ namespace community_institute_API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<int>("clasesId")
                         .HasColumnType("int");
 
@@ -137,8 +163,6 @@ namespace community_institute_API.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("TAId");
-
-                    b.HasIndex("UserId");
 
                     b.HasIndex("clasesId");
 
@@ -158,6 +182,9 @@ namespace community_institute_API.Migrations
                     b.Property<int>("GradesId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ProfessorId")
+                        .HasColumnType("int");
+
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
 
@@ -171,6 +198,8 @@ namespace community_institute_API.Migrations
 
                     b.HasIndex("GradesId")
                         .IsUnique();
+
+                    b.HasIndex("ProfessorId");
 
                     b.HasIndex("StudentId");
 
@@ -229,6 +258,12 @@ namespace community_institute_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("AcademicId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Bio")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ImgUrl")
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
@@ -237,7 +272,14 @@ namespace community_institute_API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Professors");
                 });
@@ -271,17 +313,11 @@ namespace community_institute_API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AssignmentId");
 
                     b.HasIndex("EnrollmentId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Solutions");
                 });
@@ -294,8 +330,14 @@ namespace community_institute_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("AcademicId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Age")
                         .HasColumnType("int");
+
+                    b.Property<decimal?>("GPA")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("ImageURL")
                         .HasMaxLength(200)
@@ -309,6 +351,9 @@ namespace community_institute_API.Migrations
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("year")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -331,15 +376,18 @@ namespace community_institute_API.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Units")
+                        .HasMaxLength(20)
                         .HasColumnType("int");
 
-                    b.Property<int>("classid")
+                    b.Property<int>("year")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("classid");
 
                     b.ToTable("Subjects", (string)null);
                 });
@@ -352,6 +400,9 @@ namespace community_institute_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("AcademicId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ImgUrl")
                         .HasColumnType("nvarchar(max)");
 
@@ -359,7 +410,14 @@ namespace community_institute_API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("TAs", (string)null);
                 });
@@ -478,7 +536,7 @@ namespace community_institute_API.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -577,6 +635,32 @@ namespace community_institute_API.Migrations
                     b.ToTable("TAsclases");
                 });
 
+            modelBuilder.Entity("community_institute_API.Data.Domin.Appuser", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.Property<string>("AcademicId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImgUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.ToTable("Users", (string)null);
+                });
+
+            modelBuilder.Entity("community_institute_API.Data.Domin.Admin", b =>
+                {
+                    b.HasOne("community_institute_API.Data.Domin.Appuser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("community_institute_API.Data.Domin.Assignment", b =>
                 {
                     b.HasOne("community_institute_API.Data.Domin.TAs", "TA")
@@ -610,9 +694,17 @@ namespace community_institute_API.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("community_institute_API.Data.Domin.Subject", "Subject")
+                        .WithMany("classes")
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Groups");
 
                     b.Navigation("Professor");
+
+                    b.Navigation("Subject");
                 });
 
             modelBuilder.Entity("community_institute_API.Data.Domin.ClassMaterial", b =>
@@ -621,12 +713,6 @@ namespace community_institute_API.Migrations
                         .WithMany("Materials")
                         .HasForeignKey("TAId")
                         .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
 
                     b.HasOne("community_institute_API.Data.Domin.clases", "clases")
                         .WithMany()
@@ -641,8 +727,6 @@ namespace community_institute_API.Migrations
 
                     b.Navigation("TA");
 
-                    b.Navigation("User");
-
                     b.Navigation("clases");
 
                     b.Navigation("professors");
@@ -655,6 +739,10 @@ namespace community_institute_API.Migrations
                         .HasForeignKey("community_institute_API.Data.Domin.Enrollment", "GradesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("community_institute_API.Data.Domin.Professors", "Professor")
+                        .WithMany()
+                        .HasForeignKey("ProfessorId");
 
                     b.HasOne("community_institute_API.Data.Domin.Student", "Student")
                         .WithMany("Enrollments")
@@ -670,9 +758,22 @@ namespace community_institute_API.Migrations
 
                     b.Navigation("Grades");
 
+                    b.Navigation("Professor");
+
                     b.Navigation("Student");
 
                     b.Navigation("clases");
+                });
+
+            modelBuilder.Entity("community_institute_API.Data.Domin.Professors", b =>
+                {
+                    b.HasOne("community_institute_API.Data.Domin.Appuser", "User")
+                        .WithOne()
+                        .HasForeignKey("community_institute_API.Data.Domin.Professors", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("community_institute_API.Data.Domin.Solution", b =>
@@ -689,22 +790,14 @@ namespace community_institute_API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("Assignment");
 
                     b.Navigation("Enrollment");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("community_institute_API.Data.Domin.Student", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                    b.HasOne("community_institute_API.Data.Domin.Appuser", "User")
                         .WithOne()
                         .HasForeignKey("community_institute_API.Data.Domin.Student", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -713,15 +806,15 @@ namespace community_institute_API.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("community_institute_API.Data.Domin.Subject", b =>
+            modelBuilder.Entity("community_institute_API.Data.Domin.TAs", b =>
                 {
-                    b.HasOne("community_institute_API.Data.Domin.clases", "Classes")
-                        .WithMany("Subjects")
-                        .HasForeignKey("classid")
+                    b.HasOne("community_institute_API.Data.Domin.Appuser", "User")
+                        .WithOne()
+                        .HasForeignKey("community_institute_API.Data.Domin.TAs", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Classes");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -790,6 +883,15 @@ namespace community_institute_API.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("community_institute_API.Data.Domin.Appuser", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                        .WithOne()
+                        .HasForeignKey("community_institute_API.Data.Domin.Appuser", "Id")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("community_institute_API.Data.Domin.Assignment", b =>
                 {
                     b.Navigation("Solutions");
@@ -798,8 +900,6 @@ namespace community_institute_API.Migrations
             modelBuilder.Entity("community_institute_API.Data.Domin.clases", b =>
                 {
                     b.Navigation("Enrollments");
-
-                    b.Navigation("Subjects");
                 });
 
             modelBuilder.Entity("community_institute_API.Data.Domin.Enrollment", b =>
@@ -831,6 +931,11 @@ namespace community_institute_API.Migrations
             modelBuilder.Entity("community_institute_API.Data.Domin.Student", b =>
                 {
                     b.Navigation("Enrollments");
+                });
+
+            modelBuilder.Entity("community_institute_API.Data.Domin.Subject", b =>
+                {
+                    b.Navigation("classes");
                 });
 
             modelBuilder.Entity("community_institute_API.Data.Domin.TAs", b =>

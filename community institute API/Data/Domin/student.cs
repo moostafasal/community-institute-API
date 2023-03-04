@@ -21,15 +21,24 @@ namespace community_institute_API.Data.Domin
         [Required]
         [Display(Name = "Age")]
         public int Age { get; set; }
+        //yar
+        public int? year { get; set; }
 
+        //GPA
+        public decimal? GPA { get; set; }
+        
         [Display(Name = "Image URL")]
+        //acdimicId
+        public string? AcademicId { get; set; }
+        
         public string ?ImageURL { get; set; }
+        
 
+        
         public ICollection<Enrollment> Enrollments { get; set; } = new HashSet<Enrollment>();
         public string UserId { get; set; }
-
         [ForeignKey("UserId")]
-        public IdentityUser User { get; set; }
+        public Appuser User { get; set; }
     }
     
 }

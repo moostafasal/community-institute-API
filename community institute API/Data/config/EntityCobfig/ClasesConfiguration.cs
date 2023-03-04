@@ -18,11 +18,11 @@ public class ClasesConfiguration : IEntityTypeConfiguration<clases>
             .WithOne(e => e.clases)
             .HasForeignKey(e => e.classid)
             .OnDelete(DeleteBehavior.Cascade);
+        //relation between classes and subject
+        builder.HasOne(c => c.Subject)
+            .WithMany(s => s.classes)
+            .HasForeignKey(c => c.SubjectId);
 
-        builder.HasMany(c => c.Subjects)
-            .WithOne(s => s.Classes)
-            .HasForeignKey(s => s.classid)
-            .OnDelete(DeleteBehavior.Cascade);
 
 
 

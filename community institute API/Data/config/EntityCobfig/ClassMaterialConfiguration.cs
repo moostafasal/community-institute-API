@@ -21,7 +21,7 @@
 
             builder.HasOne(C => C.TA).WithMany(T => T.Materials).HasForeignKey(c => c.TAId).IsRequired(false).OnDelete(DeleteBehavior.Restrict);
             builder.HasOne(C => C.professors).WithMany(P => P.Materials).HasForeignKey(c => c.proffID).OnDelete(DeleteBehavior.Restrict);
-            builder.HasOne(c => c.User).WithMany().HasForeignKey(c => c.UserId).OnDelete(DeleteBehavior.Restrict);
+            //builder.HasOne(c => c.User).WithMany().HasForeignKey(c => c.UserId).OnDelete(DeleteBehavior.Restrict);
 
 
 
