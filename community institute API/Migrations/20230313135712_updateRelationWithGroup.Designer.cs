@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using community_institute_API.Data;
 
@@ -11,9 +12,10 @@ using community_institute_API.Data;
 namespace community_institute_API.Migrations
 {
     [DbContext(typeof(ComContext))]
-    partial class ComContextModelSnapshot : ModelSnapshot
+    [Migration("20230313135712_updateRelationWithGroup")]
+    partial class updateRelationWithGroup
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -183,6 +185,9 @@ namespace community_institute_API.Migrations
                     b.Property<int>("GradesId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ProfessorId")
+                        .HasColumnType("int");
+
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
 
@@ -196,6 +201,8 @@ namespace community_institute_API.Migrations
 
                     b.HasIndex("GradesId")
                         .IsUnique();
+
+                    b.HasIndex("ProfessorId");
 
                     b.HasIndex("StudentId");
 
@@ -238,9 +245,6 @@ namespace community_institute_API.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<int>("Number")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -739,6 +743,10 @@ namespace community_institute_API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("community_institute_API.Data.Domin.Professors", "Professor")
+                        .WithMany()
+                        .HasForeignKey("ProfessorId");
+
                     b.HasOne("community_institute_API.Data.Domin.Student", "Student")
                         .WithMany("Enrollments")
                         .HasForeignKey("StudentId")
@@ -752,6 +760,8 @@ namespace community_institute_API.Migrations
                         .IsRequired();
 
                     b.Navigation("Grades");
+
+                    b.Navigation("Professor");
 
                     b.Navigation("Student");
 

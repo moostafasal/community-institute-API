@@ -39,9 +39,10 @@ namespace community_institute_API.Data
             modelBuilder.ApplyConfiguration(new AssignmentConfiguration());
             //class mat
             modelBuilder.ApplyConfiguration(new ClassMaterialConfiguration());
-            
-            //assingment
 
+            //assingment
+            //group
+            modelBuilder.ApplyConfiguration(new GroupConfiguration());
 
 
 

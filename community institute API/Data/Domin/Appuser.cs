@@ -4,12 +4,16 @@ namespace community_institute_API.Data.Domin
 {
     public class Appuser : IdentityUser
     {
-        
-        //creat id
-        //public int Id { get; set; }
-        public string FullName { get; set; }
 
+        public string? FullName { get; set; }
+        
         public string? ImgUrl { get; set; }
+
+        public string? Role { get; set; }
+
+
+        //make academic id unique
+        
         public string? AcademicId { get; set; }
 
 

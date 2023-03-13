@@ -5,6 +5,10 @@ using community_institute_API.Serves;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using YourNamespace.Helpers;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
+using community_institute_API.Errors;
 
 namespace community_institute_API.Controllers
 {
@@ -19,8 +23,9 @@ namespace community_institute_API.Controllers
         //logger
         private readonly ILogger<Ahouth> _logger;
         private readonly ITookenServiice _tokenServes;
+        private readonly FileService _fileService;
 
-        public Ahouth(ComContext context, UserManager<Appuser> userManager, RoleManager<IdentityRole> roleManager, ILogger<Ahouth> logger, ITookenServiice tokenServes)
+        public Ahouth(ComContext context, UserManager<Appuser> userManager, RoleManager<IdentityRole> roleManager, ILogger<Ahouth> logger, ITookenServiice tokenServes, FileService fileService)
 
         {
             _context = context;
@@ -28,6 +33,8 @@ namespace community_institute_API.Controllers
             _roleManager = roleManager;
             _logger = logger;
             _tokenServes = tokenServes;
+          _fileService = fileService;
+
         }
 
 
@@ -37,30 +44,39 @@ namespace community_institute_API.Controllers
         {
             if (ModelState.IsValid)
             {
+                var Img = await _fileService.SaveFile(studentRegisterDto.Image);
+                var url = _fileService.GetFileUrl(Img);
                 var user = new Appuser
                 {
                     UserName = studentRegisterDto.Email,
                     Email = studentRegisterDto.Email,
                     FullName = studentRegisterDto.Name,
                     AcademicId = studentRegisterDto.AcademicId,
-                    ImgUrl = await FileHelper.SaveFile(studentRegisterDto.Image),
+                    ImgUrl = Img,
+                    Role="student"
                     
 
                 };
                 //add user data to student table
                 var student = new Student
                 {
+                    Name=studentRegisterDto.Name,
                     Age = studentRegisterDto.Age,
                     UserId = user.Id,
+                    AcademicId=studentRegisterDto.AcademicId,
                    year  = studentRegisterDto.year,
                     GPA = studentRegisterDto.GPA,
+                    ImageURL= Img,
 
                 };
-
                 var result = await _userManager.CreateAsync(user, studentRegisterDto.Password);
 
                 if (result.Succeeded)
                 {
+                 _context.Students.Add(student);
+                    await _context.SaveChangesAsync();
+                    //save data in student table
+                    
                     await _userManager.AddToRoleAsync(user, "Student");
                     var token = await _tokenServes.CreateToken(user, _userManager);
                     return Ok(new { token });
@@ -68,12 +84,15 @@ namespace community_institute_API.Controllers
 
                 else
                 {
-                    return BadRequest(result.Errors);
+                    return BadRequest(new ApiResponse(400, "Try Again same thing Error "));
+                    
                 }
+                
             }
             else
             {
-                return BadRequest(ModelState);
+                return BadRequest(new ApiResponse(400));
+                
             }
         }
         //student login end point 
@@ -87,11 +106,30 @@ namespace community_institute_API.Controllers
                 if (result)
                 {
                     var token = await _tokenServes.CreateToken(user, _userManager);
-                    return Ok(new { token });
+                    //get student data
+                    var student = await (from s in _context.Students
+                                         where s.UserId == user.Id
+                                         select new StudentDto
+                                         {
+                                             Name = s.Name,
+                                             Age = s.Age,
+                                             AcademicId = s.AcademicId,
+                                             Photo = _fileService.GetFileUrl( s.ImageURL),
+                                             Year = s.year,
+                                            GPA  = s.GPA,
+                                            
+                                             
+
+                                         }).FirstOrDefaultAsync();
+
+
+                    return Ok(new { token, student });
                 }
+                    
+                
                 else
                 {
-                    return Unauthorized();
+                    return Unauthorized(new ApiResponse(401));
                 }
             }
             else

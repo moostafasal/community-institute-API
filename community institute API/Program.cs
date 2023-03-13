@@ -1,11 +1,14 @@
 using community_institute_API.Data;
 using community_institute_API.Data.config;
+using community_institute_API.Errors;
 using community_institute_API.EXtintion;
 using community_institute_API.Serves;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Text;
 
 namespace community_institute_API
@@ -20,7 +23,32 @@ namespace community_institute_API
             builder.Services.AddControllers();
           
             
-                builder.Services.AddSwaggerGen();
+                builder.Services.AddSwaggerGen(c =>
+                {
+                    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                    {
+                        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                        Name = "Authorization",
+                        In = ParameterLocation.Header,
+                        Type = SecuritySchemeType.Http,
+                        Scheme = "bearer",
+                        BearerFormat = "JWT"
+                    });
+                    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] { }
+        }
+    });
+                });
             //allow any origin
             builder.Services.AddCors(options =>
             {
@@ -31,8 +59,26 @@ namespace community_institute_API
             });
             //all endpoint controller API
             builder.Services.AddControllers();
-//allow DI for ItookenServes
+            builder.Services.AddHttpContextAccessor();
+
+            //allow DI for ItookenServes
             builder.Services.AddScoped<ITookenServiice, TokenServes>();
+            builder.Services.AddScoped<FileService>();
+            builder.Services.Configure<ApiBehaviorOptions>(Options =>
+            {
+                //momdel state was not valid acthin context its contan the action active now 
+                Options.InvalidModelStateResponseFactory = ActionContext =>
+                {
+                    var errors = ActionContext.ModelState.Where(M => M.Value.Errors.Count() > 0)
+                    //lisst of model has error  we use select meny
+                    .SelectMany(M => M.Value.Errors).Select(E => E.ErrorMessage).ToArray();
+                    var ErrorrRespons = new ApiValidation()
+                    {
+                        Errors = errors
+                    };
+                    return new BadRequestObjectResult(ErrorrRespons);
+                };
+            });
 
 
 
@@ -62,6 +108,7 @@ namespace community_institute_API
             }
 
             app.UseRouting();
+             app.UseStaticFiles();
 
             app.UseAuthorization();
             app.UseAuthentication();

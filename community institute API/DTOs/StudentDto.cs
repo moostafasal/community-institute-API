@@ -7,6 +7,10 @@
         public int Age { get; set; }
         public int? Year { get; set; }
         public string AcademicId { get; set; }
+        // photo
+        //GPA
+        public decimal? GPA { get; set; }
+        public string Photo { get; set; }
         public List<EnrollmentDto> Enrollments { get; set; }
     }
 }

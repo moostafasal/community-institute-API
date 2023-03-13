@@ -14,6 +14,9 @@ namespace community_institute_API.DTOs
         [RegularExpression(@"^[a-zA-Z0-9._%+-]+@hti\.edu\.eg$", ErrorMessage = "The email must be a valid HTI email address ending with @hti.edu.eg")]
         public string Email { get; set; }
 
+        //unique
+        [Required]
+        
         public string? AcademicId { get; set; }
         //Rgex 
 
@@ -25,12 +28,13 @@ namespace community_institute_API.DTOs
         [Compare("Password", ErrorMessage = "Passwords do not match")]
         [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
-        public decimal? GPA { get; set; }
 
         [DataType(DataType.Upload)]
         [MaxFileSize(5 * 1024 * 1024)]
         [AllowedExtensions(new string[] { ".jpg", ".png", ".gif" })]
         public IFormFile ?Image { get; set; }
+
+
 
     }
 }

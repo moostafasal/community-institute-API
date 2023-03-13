@@ -1,6 +1,7 @@
 ﻿using community_institute_API.Data;
 using community_institute_API.Data.Domin;
 using community_institute_API.DTOs;
+using community_institute_API.Errors;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +25,7 @@ namespace community_institute_API.Controllers
 
         [Authorize(Roles = "Student")]
         [HttpGet("me")]
+        
         public async Task<ActionResult<StudentDto>> GetStudent()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -35,12 +37,11 @@ namespace community_institute_API.Controllers
                 .Include(s => s.Enrollments)
                     .ThenInclude(e => e.Grades)
                 .Include(s => s.Enrollments)
-                    .ThenInclude(e => e.Professor)
                 .FirstOrDefaultAsync(s => s.UserId == userId);
 
             if (student == null)
             {
-                return null;
+                return BadRequest(new ApiResponse(404));
             }
 
             var studentDto = new StudentDto
@@ -53,11 +54,11 @@ namespace community_institute_API.Controllers
                 Enrollments = student.Enrollments.Select(e => new EnrollmentDto
                 {
                     CourseName = e.clases.Subject.Name,
-                    InstructorName = e.Professor.Name,
                     IsEnrolled = e.states,
                     Grade = e.Grades.final,
                 }).ToList()
             };
+            
 
             return studentDto;
         }

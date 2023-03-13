@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using community_institute_API.Data;
 
@@ -11,9 +12,10 @@ using community_institute_API.Data;
 namespace community_institute_API.Migrations
 {
     [DbContext(typeof(ComContext))]
-    partial class ComContextModelSnapshot : ModelSnapshot
+    [Migration("20230306213604_addNamefildToClasses")]
+    partial class addNamefildToClasses
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -115,7 +117,8 @@ namespace community_institute_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GroupId");
+                    b.HasIndex("GroupId")
+                        .IsUnique();
 
                     b.HasIndex("ProfessorId");
 
@@ -183,6 +186,9 @@ namespace community_institute_API.Migrations
                     b.Property<int>("GradesId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ProfessorId")
+                        .HasColumnType("int");
+
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
 
@@ -196,6 +202,8 @@ namespace community_institute_API.Migrations
 
                     b.HasIndex("GradesId")
                         .IsUnique();
+
+                    b.HasIndex("ProfessorId");
 
                     b.HasIndex("StudentId");
 
@@ -228,21 +236,20 @@ namespace community_institute_API.Migrations
 
             modelBuilder.Entity("community_institute_API.Data.Domin.Groups", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
+
+                    b.Property<int>("ClassId")
+                        .HasColumnType("int");
 
                     b.Property<string>("GroupName")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Number")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
+                    b.HasKey("id");
 
                     b.ToTable("Groups");
                 });
@@ -645,9 +652,6 @@ namespace community_institute_API.Migrations
                     b.Property<string>("ImgUrl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Role")
-                        .HasColumnType("nvarchar(max)");
-
                     b.ToTable("Users", (string)null);
                 });
 
@@ -681,10 +685,10 @@ namespace community_institute_API.Migrations
 
             modelBuilder.Entity("community_institute_API.Data.Domin.clases", b =>
                 {
-                    b.HasOne("community_institute_API.Data.Domin.Groups", "Group")
-                        .WithMany("classes")
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("community_institute_API.Data.Domin.Groups", "Groups")
+                        .WithOne("Class")
+                        .HasForeignKey("community_institute_API.Data.Domin.clases", "GroupId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("community_institute_API.Data.Domin.Professors", "Professor")
@@ -699,7 +703,7 @@ namespace community_institute_API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Group");
+                    b.Navigation("Groups");
 
                     b.Navigation("Professor");
 
@@ -739,6 +743,10 @@ namespace community_institute_API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("community_institute_API.Data.Domin.Professors", "Professor")
+                        .WithMany()
+                        .HasForeignKey("ProfessorId");
+
                     b.HasOne("community_institute_API.Data.Domin.Student", "Student")
                         .WithMany("Enrollments")
                         .HasForeignKey("StudentId")
@@ -752,6 +760,8 @@ namespace community_institute_API.Migrations
                         .IsRequired();
 
                     b.Navigation("Grades");
+
+                    b.Navigation("Professor");
 
                     b.Navigation("Student");
 
@@ -908,7 +918,8 @@ namespace community_institute_API.Migrations
 
             modelBuilder.Entity("community_institute_API.Data.Domin.Groups", b =>
                 {
-                    b.Navigation("classes");
+                    b.Navigation("Class")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("community_institute_API.Data.Domin.Professors", b =>

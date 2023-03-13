@@ -9,10 +9,10 @@ public class ClasesConfiguration : IEntityTypeConfiguration<clases>
     {
         builder.HasKey(c => c.Id);
 
-        builder.HasOne(c => c.Groups)
-            .WithOne(g => g.Class)
-            .HasForeignKey<clases>(c => c.GroupId)
-            .OnDelete(DeleteBehavior.Restrict);
+            //builder.HasOne(c => c.Groups)
+            //    .WithMany()
+          
+            //.OnDelete(DeleteBehavior.Restrict);
 
         builder.HasMany(c => c.Enrollments)
             .WithOne(e => e.clases)
@@ -22,7 +22,11 @@ public class ClasesConfiguration : IEntityTypeConfiguration<clases>
         builder.HasOne(c => c.Subject)
             .WithMany(s => s.classes)
             .HasForeignKey(c => c.SubjectId);
-
+        //with group    
+        builder.HasOne(c => c.Group)
+            .WithMany(g => g.classes)
+            .HasForeignKey(c => c.GroupId);
+        
 
 
 

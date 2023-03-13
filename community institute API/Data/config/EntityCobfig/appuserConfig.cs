@@ -31,6 +31,8 @@ namespace community_institute_API.Data.config.EntityCobfig
             //    .WithOne(a => a.user)
             //    .HasForeignKey(a => a.userid)
             //    .OnDelete(DeleteBehavior.Cascade);
+            //acdimic id is uniqe
+            builder.HasIndex(u => u.AcademicId).IsUnique();
         }
     }
 }

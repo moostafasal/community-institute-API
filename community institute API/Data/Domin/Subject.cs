@@ -17,13 +17,9 @@ namespace community_institute_API.Data.Domin
         public int Units { get; set; }
         //name
         public string Name { get; set; }
-
-
-
-
-
         public int year { get; set; }
         public ICollection<clases> classes { get; set; } = new HashSet<clases>();
+        
 
     }
 }
