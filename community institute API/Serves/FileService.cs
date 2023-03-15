@@ -22,7 +22,9 @@ namespace community_institute_API.Serves
         // get file path
         public string GetFileUrl(string relativePath)
         {
+
             return _fileHelper.GetFileUrl(relativePath);
+
         }
 
     }

@@ -1,7 +1,7 @@
 ﻿using community_institute_API.Data;
 using community_institute_API.Data.Domin;
 using community_institute_API.DTOs;
-using community_institute_API.Serves;
+using community_institute_API.Serves.IServes;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

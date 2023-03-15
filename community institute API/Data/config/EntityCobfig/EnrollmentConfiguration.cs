@@ -19,9 +19,9 @@ namespace community_institute_API.Data.config.EntityCobfig
 
 
 
-            builder.HasOne(e => e.Grades)
-                .WithOne(g => g.Enrollment)
-                .HasForeignKey<Grades>(g => g.EnrollmentId);
+            //builder.HasOne(e => e.Grades)
+            //    .WithOne(g => g.Enrollment)
+            //    .HasForeignKey<Grades>(g => g.EnrollmentId);
 
             builder.HasMany(e => e.Solutions)
                 .WithOne(s => s.Enrollment)

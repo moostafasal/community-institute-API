@@ -1,4 +1,5 @@
 ﻿using community_institute_API.Data.Domin;
+using community_institute_API.Serves.IServes;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -23,6 +24,8 @@ namespace community_institute_API.Serves
             var aouthClaim = new List<Claim>()
             {
                 new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+
 
             };
             var userRoles = await userManager.GetRolesAsync(user);

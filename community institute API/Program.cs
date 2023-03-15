@@ -3,6 +3,8 @@ using community_institute_API.Data.config;
 using community_institute_API.Errors;
 using community_institute_API.EXtintion;
 using community_institute_API.Serves;
+using community_institute_API.Serves.IServes;
+using community_institute_API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,8 +15,8 @@ using System.Text;
 
 namespace community_institute_API
 {
-  
-        public class Program
+
+    public class Program
         {
             public static void Main(string[] args)
             {
@@ -63,6 +65,9 @@ namespace community_institute_API
 
             //allow DI for ItookenServes
             builder.Services.AddScoped<ITookenServiice, TokenServes>();
+            builder.Services.AddScoped<IEnrollmentServes, EnrollmentService>();
+
+
             builder.Services.AddScoped<FileService>();
             builder.Services.Configure<ApiBehaviorOptions>(Options =>
             {
@@ -110,7 +115,6 @@ namespace community_institute_API
             app.UseRouting();
              app.UseStaticFiles();
 
-            app.UseAuthorization();
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseHttpsRedirection();

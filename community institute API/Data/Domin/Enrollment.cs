@@ -2,10 +2,7 @@
 {
     public class Enrollment
     {
-        public Enrollment()
-        {
-
-        }
+        
         public int Id { get; set; }
 
         public int StudentId { get; set; }
@@ -13,10 +10,7 @@
         public bool states { get; set; }
         public int classid { get; set; }
         public clases clases { get; set; }
-        public int GradesId { get; set; }
-
-        public Grades? Grades { get; set; }
-
+ 
 
 
         public ICollection<Solution> Solutions { get; set; } = new HashSet<Solution>();

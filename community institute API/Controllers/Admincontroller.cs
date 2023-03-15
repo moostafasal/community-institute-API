@@ -2,6 +2,7 @@
 using community_institute_API.Data.Domin;
 using community_institute_API.DTOs;
 using community_institute_API.Serves;
+using community_institute_API.Serves.IServes;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;

@@ -14,8 +14,11 @@ namespace community_institute_API.Data.config.EntityCobfig
             builder.Property(g => g.mid);
             builder.Property(g => g.final);
             builder.HasOne(g => g.Enrollment)
-                    .WithOne(e => e.Grades)
-                    .HasForeignKey<Enrollment>(e => e.GradesId);
+              .WithOne()
+              .HasForeignKey<Grades>(g => g.EnrollmentId)
+              ;
+
+
 
         }
         }
