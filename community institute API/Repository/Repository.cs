@@ -1,56 +1,61 @@
-﻿//using community_institute_API.Data;
-//using Microsoft.EntityFrameworkCore;
+﻿using community_institute_API.Data;
+using Microsoft.EntityFrameworkCore;
 
-//namespace community_institute_API.Repository
-//{
-//    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
-//    {
-//        private readonly ComContext _dbContext;
+namespace community_institute_API.Repository
+{
+    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
+    {
+        private readonly ComContext _dbContext;
+        public Repository(ComContext context)
+        {
+            _dbContext = context;
+        }
+        
+        
 
-//        public Repository(ComContext dbContext)
-//        {
-//            _dbContext = dbContext;
-//        }
+        public Task AddAsync(TEntity entity)
+        {
+            //add async to _dbContext and save changes async to _dbContext 
+            _dbContext.Set<TEntity>().Add(entity);
+            return _dbContext.SaveChangesAsync();
 
-//        public async Task<TEntity> GetByIdAsync(int id)
-//        {
-//            return await _dbContext.FindAsync(id);
-//        }
 
-//        public async Task<List<TEntity>> GetAllAsync()
-//        {
-//            return await _dbSet.ToListAsync();
-//        }
 
-//        public async Task AddAsync(TEntity entity)
-//        {
-//            await _dbSet.AddAsync(entity);
-//        }
 
-//        public void Update(TEntity entity)
-//        {
-//            _dbSet.Update(entity);
-//        }
 
-//        public void Delete(TEntity entity)
-//        {
-//            _dbSet.Remove(entity);
-//        }
 
-//        Task<IEnumerable<TEntity>> IRepository<TEntity>.GetAllAsync()
-//        {
-//            throw new NotImplementedException();
-//        }
+        }
 
-//        public Task UpdateAsync(TEntity entity)
-//        {
-//            throw new NotImplementedException();
-//        }
+        public Task DeleteAsync(TEntity id)
+        {
+            _dbContext.Set<TEntity>().Remove(id);
+            return _dbContext.SaveChangesAsync();
+            
+        }
 
-//        public Task DeleteAsync(int id)
-//        {
-//            throw new NotImplementedException();
-//        }
-//    }
+        public Task<List<TEntity>> GetAllAsync()
+        {
+            //return all async to _dbContext
+            return _dbContext.Set<TEntity>().ToListAsync();
+            
+        }
 
-//}
+        public async ValueTask<TEntity> GetByIdAsync(int id)
+        {
+            var entity = await _dbContext.Set<TEntity>().FindAsync(id);
+            if (entity == null)
+            {
+                throw new Exception($"Entity with id {id} not found");
+            }
+            return entity;
+        }
+
+        public Task UpdateAsync(TEntity entity)
+        {
+            _dbContext.Set<TEntity>().Update(entity);
+            return _dbContext.SaveChangesAsync();
+            
+        }
+    }
+
+}
