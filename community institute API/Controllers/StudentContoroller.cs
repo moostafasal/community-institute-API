@@ -2,6 +2,7 @@
 using community_institute_API.Data.Domin;
 using community_institute_API.DTOs;
 using community_institute_API.Errors;
+using community_institute_API.Serves;
 using community_institute_API.Serves.IServes;
 using community_institute_API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 using System.Security.Claims;
+using YourNamespace.Helpers;
 
 namespace community_institute_API.Controllers
 {
@@ -22,13 +24,14 @@ namespace community_institute_API.Controllers
         private readonly ComContext _context;
         private readonly IEnrollmentServes _enrollment;
         private readonly UserManager<Appuser> _userManager;
+        private readonly FileService _fileService;
 
-
-        public StudentContoroller(ComContext context,IEnrollmentServes enrollment ,UserManager<Appuser> userManager)
+        public StudentContoroller(ComContext context,IEnrollmentServes enrollment ,UserManager<Appuser> userManager ,FileService fileService )
         {
             _context = context;
             _enrollment = enrollment;
            _userManager = userManager;
+            _fileService = fileService;
         }
 
 
@@ -106,6 +109,62 @@ namespace community_institute_API.Controllers
             }
         }
 
+        //downlod assingment [HttpGet("download-assignment/{id}")]
+
+
+        [HttpGet]
+        [Route("DownlodAssinmnt")]
+        public async Task<IActionResult> DownloadAssignment(int id)
+        {
+            // Get the assignment from the database using the ID
+            var assignment = await _context.Assignments.FindAsync(id);
+            if (assignment == null)
+            {
+                return NotFound();
+            }
+
+            // Get the file URL from the assignment object
+            var fileUrl = _fileService.GetFileUrl(assignment.FileUrl);
+
+            try
+            {
+                // Download the file and return it as a stream
+                var fileStreamResult = _fileService.DownloadFile(fileUrl, assignment.Name);
+                return (IActionResult)fileStreamResult;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        //dwonlod class materil 
+        [HttpGet]
+        //route downlod classmatrel 
+        [Route("DwonlodClassMatril")]
+        public async Task<IActionResult> Classmatrial(int id)
+        {
+            // Get the assignment from the database using the ID
+            var classMaterial = await _context.ClassMaterials.FindAsync(id);
+            if (classMaterial == null)
+            {
+                return NotFound();
+            }
+            
+            // Get the file URL from the assignment object
+            var fileUrl = _fileService.GetFileUrl(classMaterial.Url);
+
+            try
+            {
+                // Download the file and return it as a stream
+                var fileStreamResult = _fileService.DownloadFile(fileUrl, classMaterial.Name);
+                return (IActionResult)fileStreamResult;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
     }
 }

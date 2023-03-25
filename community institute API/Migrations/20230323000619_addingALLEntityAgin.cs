@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace community_institute_API.Migrations
 {
-    public partial class addingAllentitywithIdentity : Migration
+    public partial class addingALLEntityAgin : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -35,32 +35,17 @@ namespace community_institute_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Grades",
+                name: "Groups",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    mid = table.Column<int>(type: "int", nullable: false),
-                    final = table.Column<int>(type: "int", nullable: false),
-                    EnrollmentId = table.Column<int>(type: "int", nullable: false)
+                    Number = table.Column<int>(type: "int", nullable: false),
+                    GroupName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Grades", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Groups",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    GroupName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ClassId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Groups", x => x.id);
+                    table.PrimaryKey("PK_Groups", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -75,6 +60,22 @@ namespace community_institute_API.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Roles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Subjects",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Code = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Units = table.Column<int>(type: "int", maxLength: 20, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    year = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Subjects", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -143,8 +144,9 @@ namespace community_institute_API.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ImgUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Role = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AcademicId = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -203,19 +205,20 @@ namespace community_institute_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "admins",
+                name: "Admins",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_admins", x => x.id);
+                    table.PrimaryKey("PK_Admins", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_admins_Users_UserId",
+                        name: "FK_Admins_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id");
@@ -225,10 +228,11 @@ namespace community_institute_API.Migrations
                 name: "Professors",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ImgUrl = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    AcademicId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Bio = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
@@ -246,10 +250,12 @@ namespace community_institute_API.Migrations
                 name: "Students",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Age = table.Column<int>(type: "int", nullable: false),
+                    year = table.Column<int>(type: "int", nullable: true),
+                    GPA = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    AcademicId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ImageURL = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
@@ -268,11 +274,11 @@ namespace community_institute_API.Migrations
                 name: "TAs",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ImgUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    AcademicId = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -291,9 +297,11 @@ namespace community_institute_API.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     GroupId = table.Column<int>(type: "int", nullable: false),
-                    ProfessorId = table.Column<int>(type: "int", nullable: false)
+                    SubjectId = table.Column<int>(type: "int", nullable: false),
+                    ProfessorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -302,14 +310,20 @@ namespace community_institute_API.Migrations
                         name: "FK_clases_Groups_GroupId",
                         column: x => x.GroupId,
                         principalTable: "Groups",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_clases_Professors_ProfessorId",
                         column: x => x.ProfessorId,
                         principalTable: "Professors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_clases_Subjects_SubjectId",
+                        column: x => x.SubjectId,
+                        principalTable: "Subjects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -322,8 +336,8 @@ namespace community_institute_API.Migrations
                     Url = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    proffid = table.Column<int>(type: "int", nullable: false),
-                    TAid = table.Column<int>(type: "int", nullable: false),
+                    proffid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TAid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Deadline = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -352,8 +366,8 @@ namespace community_institute_API.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ClassId = table.Column<int>(type: "int", nullable: false),
                     clasesId = table.Column<int>(type: "int", nullable: false),
-                    TAId = table.Column<int>(type: "int", nullable: true),
-                    proffID = table.Column<int>(type: "int", nullable: true),
+                    TAId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    proffID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -385,10 +399,9 @@ namespace community_institute_API.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    StudentId = table.Column<int>(type: "int", nullable: false),
-                    states = table.Column<bool>(type: "bit", nullable: false),
-                    classid = table.Column<int>(type: "int", nullable: false),
-                    GradesId = table.Column<int>(type: "int", nullable: false)
+                    StudentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    State = table.Column<int>(type: "int", nullable: false),
+                    classid = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -400,12 +413,6 @@ namespace community_institute_API.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Enrollments_Grades_GradesId",
-                        column: x => x.GradesId,
-                        principalTable: "Grades",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_Enrollments_Students_StudentId",
                         column: x => x.StudentId,
                         principalTable: "Students",
@@ -414,33 +421,11 @@ namespace community_institute_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Subjects",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Code = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Units = table.Column<int>(type: "int", nullable: false),
-                    classid = table.Column<int>(type: "int", nullable: false),
-                    year = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Subjects", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Subjects_clases_classid",
-                        column: x => x.classid,
-                        principalTable: "clases",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "TAsclases",
                 columns: table => new
                 {
                     ClassesId = table.Column<int>(type: "int", nullable: false),
-                    TAsId = table.Column<int>(type: "int", nullable: false)
+                    TAsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -455,6 +440,27 @@ namespace community_institute_API.Migrations
                         name: "FK_TAsclases_TAs_TAsId",
                         column: x => x.TAsId,
                         principalTable: "TAs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Grades",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    mid = table.Column<int>(type: "int", nullable: false),
+                    final = table.Column<int>(type: "int", nullable: false),
+                    EnrollmentId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Grades", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Grades_Enrollments_EnrollmentId",
+                        column: x => x.EnrollmentId,
+                        principalTable: "Enrollments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -490,8 +496,8 @@ namespace community_institute_API.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_admins_UserId",
-                table: "admins",
+                name: "IX_Admins_UserId",
+                table: "Admins",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -539,13 +545,17 @@ namespace community_institute_API.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_clases_GroupId",
                 table: "clases",
-                column: "GroupId",
-                unique: true);
+                column: "GroupId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_clases_ProfessorId",
                 table: "clases",
                 column: "ProfessorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_clases_SubjectId",
+                table: "clases",
+                column: "SubjectId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ClassMaterials_clasesId",
@@ -568,15 +578,15 @@ namespace community_institute_API.Migrations
                 column: "classid");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Enrollments_GradesId",
-                table: "Enrollments",
-                column: "GradesId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Enrollments_StudentId",
                 table: "Enrollments",
                 column: "StudentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Grades_EnrollmentId",
+                table: "Grades",
+                column: "EnrollmentId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Professors_UserId",
@@ -608,11 +618,6 @@ namespace community_institute_API.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Subjects_classid",
-                table: "Subjects",
-                column: "classid");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_TAs_UserId",
                 table: "TAs",
                 column: "UserId",
@@ -627,7 +632,7 @@ namespace community_institute_API.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "admins");
+                name: "Admins");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -648,10 +653,10 @@ namespace community_institute_API.Migrations
                 name: "ClassMaterials");
 
             migrationBuilder.DropTable(
-                name: "Solutions");
+                name: "Grades");
 
             migrationBuilder.DropTable(
-                name: "Subjects");
+                name: "Solutions");
 
             migrationBuilder.DropTable(
                 name: "TAsclases");
@@ -672,9 +677,6 @@ namespace community_institute_API.Migrations
                 name: "clases");
 
             migrationBuilder.DropTable(
-                name: "Grades");
-
-            migrationBuilder.DropTable(
                 name: "Students");
 
             migrationBuilder.DropTable(
@@ -682,6 +684,9 @@ namespace community_institute_API.Migrations
 
             migrationBuilder.DropTable(
                 name: "Professors");
+
+            migrationBuilder.DropTable(
+                name: "Subjects");
 
             migrationBuilder.DropTable(
                 name: "Users");

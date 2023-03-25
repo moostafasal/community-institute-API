@@ -6,7 +6,7 @@ namespace community_institute_API.Data.Domin
 {
     public class TAs
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
         public string Name { get; set; }

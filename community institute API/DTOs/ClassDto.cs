@@ -5,7 +5,7 @@
         //proff id
         public int GroupId { get; set; }
         //ProfessorId
-        public int ProfessorId { get; set; }
+        public Guid ProfessorId { get; set; }
         //subject id
         public int SubjectId { get; set; }
         //name

@@ -26,6 +26,11 @@ namespace community_institute_API.Serves
             return _fileHelper.GetFileUrl(relativePath);
 
         }
+        //downlod file
+        public async Task DownloadFile(string filePath, string fileName)
+        {
+             _fileHelper.DownloadFile(filePath, fileName);
+        }
 
     }
 }

@@ -17,11 +17,6 @@ namespace community_institute_API.Data.Domin
         //relation to group one
         public int GroupId { get; set; }
         public Groups Group { get; set; }
-        
-        
-
-
-
         //relation between subject class hass manny subkect and subject has one class
         public int SubjectId { get; set; }
         public Subject Subject { get; set; }
@@ -32,7 +27,7 @@ namespace community_institute_API.Data.Domin
         public ICollection<TAs> TAs { get; set; } = new HashSet<TAs>();
 
 
-        public int? ProfessorId { get; set; }
+        public Guid? ProfessorId { get; set; }
         public Professors Professor { get; set; }
     }
 }

@@ -24,6 +24,9 @@
     <Folder Include="Helper\" />
     <Folder Include="Erorres\" />
     <Folder Include="midelwear\" />
+    <Folder Include="wwwroot\images\uploads\" />
+    <Folder Include="wwwroot\assingment\" />
+    <Folder Include="wwwroot\MaterialClass\" />
   </ItemGroup>
 
 </Project>

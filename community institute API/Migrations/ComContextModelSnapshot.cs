@@ -62,25 +62,33 @@ namespace community_institute_API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("FileUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TAid")
-                        .HasColumnType("int");
+                    b.Property<Guid>("TAid")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Url")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("proffid")
+                    b.Property<int?>("classesId")
                         .HasColumnType("int");
+
+                    b.Property<int>("classid")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("proffid")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("TAid");
+
+                    b.HasIndex("classesId");
 
                     b.HasIndex("proffid");
 
@@ -106,9 +114,9 @@ namespace community_institute_API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ProfessorId")
+                    b.Property<Guid?>("ProfessorId")
                         .IsRequired()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("SubjectId")
                         .HasColumnType("int");
@@ -144,10 +152,11 @@ namespace community_institute_API.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<int?>("TAId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("TAId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("Timestamp")
+                    b.Property<DateTime?>("Timestamp")
+                        .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
@@ -158,8 +167,8 @@ namespace community_institute_API.Migrations
                     b.Property<int>("clasesId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("proffID")
-                        .HasColumnType("int");
+                    b.Property<Guid>("proffID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -180,14 +189,14 @@ namespace community_institute_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("StudentId")
+                    b.Property<int>("State")
                         .HasColumnType("int");
+
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("classid")
                         .HasColumnType("int");
-
-                    b.Property<bool>("states")
-                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -246,11 +255,9 @@ namespace community_institute_API.Migrations
 
             modelBuilder.Entity("community_institute_API.Data.Domin.Professors", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AcademicId")
                         .HasColumnType("nvarchar(max)");
@@ -318,11 +325,9 @@ namespace community_institute_API.Migrations
 
             modelBuilder.Entity("community_institute_API.Data.Domin.Student", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AcademicId")
                         .HasColumnType("nvarchar(max)");
@@ -388,11 +393,9 @@ namespace community_institute_API.Migrations
 
             modelBuilder.Entity("community_institute_API.Data.Domin.TAs", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AcademicId")
                         .HasColumnType("nvarchar(max)");
@@ -619,8 +622,8 @@ namespace community_institute_API.Migrations
                     b.Property<int>("ClassesId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TAsId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("TAsId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ClassesId", "TAsId");
 
@@ -665,6 +668,10 @@ namespace community_institute_API.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.HasOne("community_institute_API.Data.Domin.clases", "classes")
+                        .WithMany()
+                        .HasForeignKey("classesId");
+
                     b.HasOne("community_institute_API.Data.Domin.Professors", "professors")
                         .WithMany("Assignment")
                         .HasForeignKey("proffid")
@@ -672,6 +679,8 @@ namespace community_institute_API.Migrations
                         .IsRequired();
 
                     b.Navigation("TA");
+
+                    b.Navigation("classes");
 
                     b.Navigation("professors");
                 });
@@ -719,7 +728,8 @@ namespace community_institute_API.Migrations
                     b.HasOne("community_institute_API.Data.Domin.Professors", "professors")
                         .WithMany("Materials")
                         .HasForeignKey("proffID")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("TA");
 

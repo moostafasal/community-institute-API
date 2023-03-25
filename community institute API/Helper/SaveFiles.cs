@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
@@ -17,6 +19,7 @@ namespace YourNamespace.Helpers
         {
             _httpContextAccessor = httpContextAccessor;
             _configuration = configuration;
+            
             
         }
 
@@ -64,7 +67,7 @@ namespace YourNamespace.Helpers
                 File.Delete(filePath);
             }
         }
-        private  string GetBaseUrl()
+        public  string GetBaseUrl()
         {
             var request = _httpContextAccessor.HttpContext.Request;
             var scheme = request.Scheme;
@@ -73,6 +76,40 @@ namespace YourNamespace.Helpers
 
             return $"{scheme}://{host}{pathBase}";
         }
+
+        public FileStreamResult DownloadFile(string relativePath, string fileName)
+        {
+            // Combine the directory path and file name to get the full file path using GetBaseUrl()
+            var filePath = Path.Combine(GetBaseUrl(), relativePath);
+
+            // Check if the file exists
+            if (!File.Exists(filePath))
+            {
+                throw new Exception("File not found");
+            }
+
+            // Set the content type based on the file extension
+            var contentType = "application/octet-stream";
+            var extension = Path.GetExtension(filePath);
+            if (!string.IsNullOrEmpty(extension))
+            {
+                var provider = new FileExtensionContentTypeProvider();
+                provider.TryGetContentType(extension, out contentType);
+            }
+
+            // Set the file name for the download
+            var downloadFileName = fileName ?? Path.GetFileName(filePath);
+
+            // Return the file as a stream for download
+            var stream = new FileStream(filePath, FileMode.Open);
+            return new FileStreamResult(stream, contentType)
+            {
+                FileDownloadName = downloadFileName
+            };
+        }
+
+
+
 
     }
 

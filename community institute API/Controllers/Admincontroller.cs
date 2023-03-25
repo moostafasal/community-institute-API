@@ -135,17 +135,24 @@ namespace community_institute_API.Controllers
             {
                 return Unauthorized("You are not authorized to access this resource.");
             }
+            //cheek if modle state is valid or not 
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var ImgUrl = await _fileService.SaveFile(professorRegistrationDto.Image);
 
             // create a new user with the given email and password
             var user = new Appuser
             {
                 Email = professorRegistrationDto.Email,
-                UserName = professorRegistrationDto.Email.Split('@')[0],
                 FullName = professorRegistrationDto.Name,
+                UserName=professorRegistrationDto.AcademicId,
                 ImgUrl = ImgUrl,
                 Role = "professor",
                 AcademicId = professorRegistrationDto.AcademicId,
+
 
 
 
@@ -157,7 +164,7 @@ namespace community_institute_API.Controllers
             {
                 return BadRequest(result.Errors);
             }
-            await _userManager.AddToRoleAsync(user, "Professors");
+            await _userManager.AddToRoleAsync(user, "professor");
 
             // create a new Professor entity with the given properties
             var professor = new Professors
@@ -171,12 +178,11 @@ namespace community_institute_API.Controllers
             await _context.Professors.AddAsync(professor);
             await _context.SaveChangesAsync();
 
-            return Ok("Professor registration successful.");
+            return Ok($"Professor registration successful.{professor.Id}");
         }
+            //add suject endpoint
 
-        //add suject endpoint
-
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
+            [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         [HttpPost("subject/add")]
         public async Task<IActionResult> AddSubject([FromBody] SubjectDto subjectDto)
         {

@@ -37,63 +37,61 @@ namespace community_institute_API.Controllers
           _fileService = fileService;
 
         }
+        
+        
 
+        
+        
+        
+ 
 
         [HttpPost("register/student")]
 
         public async Task<IActionResult> RegisterStudent([FromForm] StudentRegisterDto studentRegisterDto)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var Img = await _fileService.SaveFile(studentRegisterDto.Image);
-                var url = _fileService.GetFileUrl(Img);
-                var user = new Appuser
-                {
-                    UserName = studentRegisterDto.Email,
-                    Email = studentRegisterDto.Email,
-                    FullName = studentRegisterDto.Name,
-                    AcademicId = studentRegisterDto.AcademicId,
-                    ImgUrl = Img,
-                    Role="student"
-                    
+                return BadRequest(new ApiResponse(400));
+            }
 
-                };
-                //add user data to student table
-                var student = new Student
-                {
-                    Name=studentRegisterDto.Name,
-                    Age = studentRegisterDto.Age,
-                    UserId = user.Id,
-                    AcademicId=studentRegisterDto.AcademicId,
-                   year  = studentRegisterDto.year,
-                    GPA = studentRegisterDto.GPA,
-                    ImageURL= Img,
+            var Img = await _fileService.SaveFile(studentRegisterDto.Image);
+            var url = _fileService.GetFileUrl(Img);
+            var user = new Appuser
+            {
+                UserName = studentRegisterDto.Email,
+                Email = studentRegisterDto.Email,
+                FullName = studentRegisterDto.Name,
+                AcademicId = studentRegisterDto.AcademicId,
+                ImgUrl = Img,
+                Role = "student"
+            };
+            //add user data to student table
+            var student = new Student
+            {
+                Name = studentRegisterDto.Name,
+                Age = studentRegisterDto.Age,
+                UserId = user.Id,
+                AcademicId = studentRegisterDto.AcademicId,
+                year = studentRegisterDto.year,
+                GPA = studentRegisterDto.GPA,
+                ImageURL = Img,
 
-                };
-                var result = await _userManager.CreateAsync(user, studentRegisterDto.Password);
+            };
+            var result = await _userManager.CreateAsync(user, studentRegisterDto.Password);
 
-                if (result.Succeeded)
-                {
-                 _context.Students.Add(student);
-                    await _context.SaveChangesAsync();
-                    //save data in student table
-                    
-                    await _userManager.AddToRoleAsync(user, "Student");
-                    var token = await _tokenServes.CreateToken(user, _userManager);
-                    return Ok(new { token });
-                }
+            if (result.Succeeded)
+            {
+                _context.Students.Add(student);
+                await _context.SaveChangesAsync();
+                //save data in student table
 
-                else
-                {
-                    return BadRequest(new ApiResponse(400, "Try Again same thing Error "));
-                    
-                }
-                
+                await _userManager.AddToRoleAsync(user, "students");
+                var token = await _tokenServes.CreateToken(user, _userManager);
+                return Ok(new { token });
             }
             else
             {
-                return BadRequest(new ApiResponse(400));
-                
+                return BadRequest(new ApiResponse(400, "Try Again same thing Error "));
             }
         }
         //student login end point 
@@ -101,6 +99,8 @@ namespace community_institute_API.Controllers
         public async Task<IActionResult> LoginStudent([FromBody] LoginDto loginDto)
         {
             var user = await _userManager.FindByEmailAsync(loginDto.Email);
+
+
             if (user != null)
             {
                 var result = await _userManager.CheckPasswordAsync(user, loginDto.Password);
@@ -108,23 +108,23 @@ namespace community_institute_API.Controllers
                 {
                     var token = await _tokenServes.CreateToken(user, _userManager);
                     //get student data
-                    var student = await (from s in _context.Students
-                                         where s.UserId == user.Id
-                                         select new StudentDto
-                                         {
-                                             Name = s.Name,
-                                             Age = s.Age,
-                                             AcademicId = s.AcademicId,
-                                             Photo = _fileService.GetFileUrl( s.ImageURL),
-                                             Year = s.year,
-                                            GPA  = s.GPA,
+                    //var student = await (from s in _context.Students
+                    //                     where s.UserId == user.Id
+                    //                     select new StudentDto
+                    //                     {
+                    //                         Name = s.Name,
+                    //                         Age = s.Age,
+                    //                         AcademicId = s.AcademicId,
+                    //                         Photo = _fileService.GetFileUrl( s.ImageURL),
+                    //                         Year = s.year,
+                    //                        GPA  = s.GPA,
                                             
                                              
 
-                                         }).FirstOrDefaultAsync();
+                    //                     }).FirstOrDefaultAsync();
 
 
-                    return Ok(new { token, student });
+                    return Ok(new { token /*student*/ });
                 }
                     
                 
@@ -140,7 +140,9 @@ namespace community_institute_API.Controllers
         }
 
 
+
     }
 
 }
+
 

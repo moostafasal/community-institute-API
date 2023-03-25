@@ -11,7 +11,7 @@ namespace community_institute_API.Data.Domin
         {
             Enrollments = new HashSet<Enrollment>();
         }
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 2)]

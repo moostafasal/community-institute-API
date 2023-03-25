@@ -12,14 +12,14 @@ namespace community_institute_API.Data.Domin
         public clases clases { get; set; }
         
 
-        public int ?TAId { get; set; }
-        public TAs TA { get; set; }
-        public int? proffID { get; set; }
+        public Guid ?TAId { get; set; }
+        public TAs ?TA { get; set; }
+        public Guid proffID { get; set; }
 
         public Professors professors { get; set; }
 
 
-        public DateTime Timestamp { get; set; } = DateTime.Now;
+        public DateTime ?Timestamp { get; set; } = DateTime.Now;
 
     }
 }

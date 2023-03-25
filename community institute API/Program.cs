@@ -2,6 +2,7 @@ using community_institute_API.Data;
 using community_institute_API.Data.config;
 using community_institute_API.Errors;
 using community_institute_API.EXtintion;
+using community_institute_API.Midelware;
 using community_institute_API.Serves;
 using community_institute_API.Serves.IServes;
 using community_institute_API.Services;
@@ -85,7 +86,10 @@ namespace community_institute_API
                 };
             });
 
-
+            //adding ExptionMidelWare  piplin 
+            
+  
+            
 
 
 
@@ -111,9 +115,11 @@ namespace community_institute_API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            app.UseMiddleware<ExptionMidelWare>();
 
             app.UseRouting();
              app.UseStaticFiles();
+
 
             app.UseAuthentication();
             app.UseAuthorization();
