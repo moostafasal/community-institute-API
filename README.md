@@ -45,7 +45,7 @@ The Community Institute API utilizes JSON Web Tokens (JWT) for secure authentica
 
 To run the Community Institute API locally, follow these steps:
 
-1. Clone the repository: `git clone https://github.com/your-username/community-institute-api.git`
+1. Clone the repository: `git clone https://github.com/moostafasal/community-institute-api.git`
 2. Navigate to the project directory: `cd community-institute-api`
 3. Install the required dependencies: `dotnet restore`
 4. Update the database connection string in the `appsettings.json` file.
@@ -68,6 +68,6 @@ The Community Institute API is licensed under the [MIT License](https://opensour
 
 ## Contact
 
-For any inquiries or feedback, please contact [your-email@example.com](mailto:your-email@example.com).
+For any inquiries or feedback, please contact [mostafaasalem2@gmail.com](mailto:your-email@example.com).
 
 Feel free to explore and use the Community Institute API to enhance collaboration and communication within your educational community. We hope you find it valuable and contribute to its growth.
